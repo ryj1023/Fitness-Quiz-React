@@ -1,0 +1,38 @@
+.input-box-one, .input-box-two{
+	height: 50px;
+    width: 32%;
+}
+.submit{
+	text-align: center;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    border: none;
+    color: white;
+    background-color: #232323;
+    border-radius: 25px;
+    font-size: 32px;
+    margin-top: 2%;
+    border-style: solid;
+    border-color: #FFFFFF;
+}
+.submit:hover {
+  background-color: #FFFFFF;
+  color: black;
+}
+.start-button{
+	background-color: #232323;
+    color: #FFFFFF;
+    border-radius: 25px;
+    font-size: 35px;
+    cursor: pointer;
+    padding: 16px 32px;
+    text-align: center;
+}
+.start-button:hover{
+	background-color: #FFFFFF;
+  	color: black;
+}
+form{
+	text-align: center;
+}
