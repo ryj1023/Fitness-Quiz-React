@@ -23,7 +23,7 @@ class Container extends Component{
 	// 	})
 	// }
 	addAnswer(input){
-		this.props.dispatch(addAnswer(parseInt(input)));
+		this.props.dispatch(addAnswer(input));
 		this.setState({
 			counter: this.state.counter + 1
 		})
@@ -35,23 +35,23 @@ class Container extends Component{
 	}
 	render(){
 		console.log(this.props.answers)
-		const Questions = this.props.questions.map((question)=>{ 
+		const Questions = this.props.questions.map((question, index) => { 
 			if((question.userInput === this.state.counter)){
 				return <QuestionDisplay key={question.userInput} {...question} />;
 			}
 		});
 
-		const Form = this.props.questions.map((question, index)=>{
+		const Form = this.props.questions.map((question, index) => {
 			if(question.userInput === this.state.counter){
 				switch(question.answerType){
 					case 'height':
-					return <AnswerForm key={index} type="height" onAdd={input => this.addAnswer(input)} />
+					return <AnswerForm key={this.state.counter} type="height" onAdd={input => this.addAnswer(input)} />
 					break;
 					case 'radio':
-					return <AnswerForm key={index} type="radio" onAdd={input => this.addAnswer(input)} />
+					return <AnswerForm questionInfo={question} key={this.state.counter} answerLabels={question.answers} radioAnswersLength={question.answers.length} type="radio" onAdd={input => this.addAnswer(input)} />
 					break;
 					default:
-					return <AnswerForm type="text" onAdd={input => this.addAnswer(input)} key={index} text="Submit" /> ;
+					return <AnswerForm key={this.state.counter} type="text" onAdd={input => this.addAnswer(input)} text="Submit" /> ;
 				}
 
 			}
@@ -69,14 +69,14 @@ class Container extends Component{
 			return(
 					<div className="container">
 						<h1>{Questions}</h1>
-						{Form}
+						<div>{Form}</div>
 					</div>
 				)
 			}
 		}	
 }	
 
-function mapStateToProps(state){
+const mapStateToProps = (state) => {
 	return{
 		questions: state.questions,
 		answers: state.answers

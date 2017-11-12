@@ -1,21 +1,33 @@
 import React, {Component} from 'react';
+import RadioAnswers from './radio_answers'
 import './answer_form.css';
 
 export default class AnswerForm extends Component{
 	constructor(props){
 		super(props)
 		this.state = {
-			input: 0
+			textInput: null,
+			textInput2: null,
+			radioInput: null,
 		}
 	}
 	onSubmit(event){
 		event.preventDefault();
-		const input = this.state.input;
-		if(input && this.props.onAdd){
-			this.props.onAdd(input)
+		const textInput = this.state.textInput;
+		const textInput2 = this.state.textInput2;
+		if(textInput && this.props.onAdd){
+			this.props.onAdd(parseInt(textInput))
+		}
+		else if (textInput && textInput2){
+			this.props.onAdd(this.getHeightInInches(parseInt(textInput), parseInt(textInput2)));
+		}
+		else if (this.state.radioInput){
+			this.props.onAdd(this.state.radioInput)
 		}
 		this.setState({
-			input: 0
+			textInput: null,
+			textInput2: null,
+			radioInput: null,
 		})
 	}
 	startSubmit(e){
@@ -24,9 +36,25 @@ export default class AnswerForm extends Component{
 			this.props.getStarted()
 		}
 	}
-	setInput(input){
+	setInput(textInput){
 		this.setState({
-			input
+			textInput
+		})
+	}
+	setSecondInput(textInput2){
+		this.setState({
+			textInput2
+		})
+	}
+	getHeightInInches(input1, input2){
+		const totalHeight = input1 * 12 + input2;
+		return totalHeight;
+	}
+	setRadio(e){
+		e.preventDefault();
+		console.log(e.target.value)
+		this.setState({
+			radioInput: e.target.value,
 		})
 	}
 
@@ -36,23 +64,19 @@ export default class AnswerForm extends Component{
 					case 'height':
 					return(
 						 <form onSubmit={(e)=> this.onSubmit(e)}>
-		                  <input className="input-box-one" type="text" onChange={(e)=>this.setInput(e.target.value)} placeholder="please enter a number"/>
-		                  <input className="input-box-two" name='choice' type="text"/>
+		                  <input className="input-box-one" type="text" onChange={(e)=>this.setInput(e.target.value)} placeholder="Height In Feet"/>
+		                  <input className="input-box-two" name='choice' type="text" onChange={(e)=>this.setSecondInput(e.target.value)} placeholder="Height In Inches"/>
 		                  <button className="submit">Submit</button> 
 		              </form>
 					)
 					break;
 					case 'radio':
-					return(
-						 <form onSubmit={(e)=> this.onSubmit(e)}>
-			                  <div className="answer"> 
-			                      <label>
-			                      <input name='choice' type="radio" className="option" placeholder="select a value"/>
-			                      </label>
-			                    <span>answer</span>
-			                  </div>
-			                  <button className="submit">Submit</button> 
-		              	</form>
+					const radioDisplay = this.props.answerLabels.map((label, index) => <RadioAnswers labels={label} key={index} onSelect={(e) => this.setRadio(e)}/>);
+						return (
+							<form onSubmit={(e)=> this.onSubmit(e)}>	
+								{radioDisplay}
+								<button className="submit">Submit</button>
+							</form>
 						)
 					break;
 					case 'text':
